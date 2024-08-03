@@ -1,0 +1,42 @@
+﻿
+@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Components.Features
+@using WoRe.UI.Components.Pages.Library.Models
+@using WoRe.UI.Components.Widgets.StatusIndicator;
+
+<a draggable="false" class="nav-link" href=@($"edit-set/{FlashcardSet.Id.ToString()}")>
+    <div class="default-card">
+        <div class="default-card-body">
+            <div class="card-content">
+                <h2 class="main-title">
+                    Терминов (@FlashcardSet.TermsCount) | @FlashcardSet.Title
+                </h2>
+                <CardText>
+                    <div class="d-flex flex-column">
+                        <div class="mb-2">
+                            @FlashcardSet.Description
+                        </div>
+                        <div>
+                            <StatusIndicator FlashcardSet="FlashcardSet"></StatusIndicator>
+                        </div>
+                    </div>
+                </CardText>
+            </div>
+            <div class="d-flex justify-content-end align-items-center gap-5">
+                <NavLink class="nav-link" href="@($"flashcard-set/quiz/{FlashcardSet.Id.ToString()}")">
+                    <Icon Name="IconName.CardChecklist" Size="IconSize.x4" Color="IconColor.Primary" />
+                </NavLink>
+                <NavLink class="nav-link">
+                    <Icon Name="IconName.CheckSquare" Size="IconSize.x4" Color="IconColor.Primary" />
+                </NavLink>
+            </div>
+        </div>
+    </div>
+</a>
+
+
+@code {
+    [Parameter]
+    public FlashcardSetDetails FlashcardSet { get; set; }
+    
+}

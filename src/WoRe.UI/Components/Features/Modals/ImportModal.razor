@@ -1,0 +1,37 @@
+﻿@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Common.Models
+
+
+<section>
+    @foreach (var set in _importFlashcards)
+    {
+        <div class="d-flex">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @bind="@set.IsChecked"   id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    @set.FlashcardSet.Title
+                </label>
+            </div>
+        </div>
+    }
+    <Button @onclick="@Save">Save</Button>
+</section>
+
+@code {
+    [Parameter]
+    public List<FlashcardSetDetails> Flashcards { get; set; }
+
+    private List<ImportFlashcardsChecked> _importFlashcards;
+
+    protected override void OnInitialized()
+    {
+        _importFlashcards = Flashcards
+            .Select(f => new ImportFlashcardsChecked(f)).ToList();
+        base.OnInitialized();
+    }
+
+    private void Save()
+    {
+        Console.WriteLine();
+    }
+}

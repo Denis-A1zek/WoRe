@@ -1,0 +1,31 @@
+﻿.blue-circle, .orange-circle, .green-circle, .yellow-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.blue-circle {
+    background-color: #006fff;
+}
+
+.orange-circle{
+    background-color: #f66b2f;
+}
+
+.green-circle {
+    background-color: #2ac72a;
+}
+
+.yellow-circle {
+    background-color: #e7e731;
+}
+
+@media only screen and (max-width: 760px){
+    .indicator-text{
+        display: none;
+    }
+
+    .blue-circle, .orange-circle, .green-circle, .yellow-circle{
+        
+    }
+}

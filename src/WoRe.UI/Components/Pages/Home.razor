@@ -1,0 +1,63 @@
+﻿@page "/"
+
+@inject AppDbContext DbContext;
+
+@using WoRe.Core.Infrastructures
+@using WoRe.Core.Interfaces
+@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Components.Features.Modals
+@using WoRe.UI.Components.Features.FlashcardPlate
+
+<section class="d-flex flex-column">
+    <div class="fs-1">
+        Flashcards set library
+    </div>
+    <div class="d-flex justify-content-end mb-2">
+        <Tooltip Title="Create new flashcard set">
+            <a class="btn btn-primary ms-1" href="create-set">Create</a>
+        </Tooltip>
+        <Tooltip Title="Save flashcards">
+            <button class="btn btn-success ms-3" @onclick="ShowModal">Import</button>
+        </Tooltip>
+        <Tooltip Title="Export internal flashcards set" Placement="TooltipPlacement.Left">
+            <button class="btn btn-warning ms-1">Export</button>
+        </Tooltip>
+    </div>
+    <div class="d-flex flex-column gap-3">
+        @foreach (var flashcard in Flashcards)
+        {
+            <FlashcardPlate FlashcardSet="flashcard"></FlashcardPlate>
+        }
+    </div>
+</section>
+
+
+@code {
+    [Inject]
+    public IFlashcardService FlashcardService { get; set; }
+
+    [CascadingParameter] 
+    public IModalService Modal { get; set; } = default!;    
+
+    private List<FlashcardSetDetails> Flashcards = new List<FlashcardSetDetails>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DbContext.Database.EnsureCreated();
+
+        var result = await FlashcardService.GetAllSetsAsync();
+
+        if (!result.IsError)
+            Flashcards = result.Value.ToList();
+
+        await base.OnInitializedAsync();
+    }
+
+    public void ShowModal()
+    {
+        var parameters = new ModalParameters()
+            .Add(nameof(ImportModal.Flashcards), Flashcards);
+        Modal.Show<ImportModal>("Import sets", parameters);
+    }
+}
+

@@ -1,0 +1,68 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+<CascadingBlazoredModal>
+    <div class="bb-page">
+
+        <main>
+            <div class="nav-panel d-flex justify-content-start align-content-center">
+                <div class="align-self-center">
+                    @if (NavigationManager.Uri != NavigationManager.BaseUri)
+                    {
+                        <button class="btn" @onclick="GoBack">
+                            <Icon Name="IconName.ArrowLeft" Size="IconSize.x4" Color="IconColor.White" @onclick=GoBack />
+                        </button>
+                    }
+                </div>
+                <div class="align-self-center">
+                    <p class="fs-2 text-white">WoRe</p>
+                </div>
+            </div>
+            <article class="content px-4">
+                <div class="py-2">
+                    @Body
+                </div>
+            </article>
+        </main>
+
+    </div>
+</CascadingBlazoredModal>
+
+
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [CascadingParameter]
+    public IModalService Modal { get; set; } = default!;
+
+    private Sidebar sidebar = default!;
+    private IEnumerable<NavItem> navItems = default!;
+
+    private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
+    {
+        if (navItems is null)
+            navItems = GetNavItems();
+
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
+
+    private IEnumerable<NavItem> GetNavItems()
+    {
+        navItems = new List<NavItem>
+        {
+            new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Home", Match=NavLinkMatch.All},
+            new NavItem { Id = "2", Href = "/library", IconName = IconName.PlusSquareFill, Text = "Library"},
+        };
+
+        return navItems;
+    }
+
+    // Go back in browser using Javascript on a Razor Page
+    private async Task GoBack()
+    {
+        await JSRuntime.InvokeVoidAsync("history.back");
+    }
+}

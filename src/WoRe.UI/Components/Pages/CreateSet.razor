@@ -1,0 +1,39 @@
+﻿@page "/create-set"
+
+@using WoRe.Core.Interfaces
+@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Components.Features.Flashcards
+
+<section class="d-flex flex-column">
+    <FlashsetEditor OperationType="Common.Enums.OperationType.Create"
+                    FlashcardSet="flashcard"
+                    FlashcardSetSaved="HandleClick">
+    </FlashsetEditor>
+</section>
+
+@code {
+    [Inject]
+    public IFlashcardService FlashcardService { get; set; }
+
+    private FlashcardSetCreate flashcard
+        = new FlashcardSetCreate($"Flashcard_{DateTime.Now.Ticks}", "", new List<FlashcardCreate>());
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+
+    [Inject]
+    public NavigationManager Navigation { get; set; }
+
+    private async Task HandleClick()
+    {
+        var result = await FlashcardService.CreateSetAsync(flashcard);
+        if (result.IsError)
+        {
+            ToastService.Notify(new(ToastType.Danger, $"Ошибка при добавлении нового набора"));
+        }
+        else
+        {
+            ToastService.Notify(new(ToastType.Success, $"Flashcard set successfully created"));
+            Navigation.NavigateTo("/");
+        }
+    }
+}

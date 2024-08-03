@@ -1,0 +1,22 @@
+﻿@using WoRe.UI.Components.Pages.Library.Models
+
+<div class="d-flex align-items-center justify-content-center">
+    <div class="@GetColorClass()"></div>
+    <p class="indicator-text ms-1">@IndicatorArgs.Title</p>
+    <p class="ms-1">(@IndicatorArgs.Count)</p>
+</div>
+
+@code {
+    [Parameter]
+    public QuantityIndicatorArgs IndicatorArgs { get; set; }
+    
+    private string GetColorClass()
+    {
+        return IndicatorArgs.Color switch
+        {
+            CircleColor.Orange => "orange-circle",
+            CircleColor.Green => "green-circle",
+            _ => "blue-circle",
+        };
+    }
+}

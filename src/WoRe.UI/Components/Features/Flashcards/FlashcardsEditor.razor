@@ -1,0 +1,67 @@
+﻿
+@using BlazorBootstrap
+@using WoRe.Core.Kernel.Models
+
+<Card Class="mb-4" Style="width:auto;">
+    <CardBody>
+        <CardTitle>
+            
+        </CardTitle>
+        <CardText>
+            <div class="d-flex justify-content-between gap-3">
+                <div class="d-flex flex-column flex-fill gap-3">
+                    <input class="form-control"
+                           type="text"
+                           aria-label="Term"
+                           placeholder="Enter a term"
+                           @bind="FlashcardCreate.Term">
+                    @if (activatedExtra)
+                    {
+                        <div class="d-flex gap-5">
+                            <input class="form-control"
+                                   type="text"
+                                   aria-label="Extra"
+                                   placeholder="Extra"
+                                   @bind="FlashcardCreate.Extra">
+
+                        </div>
+                    }
+                </div>
+                <div class="d-flex  flex-column flex-fill gap-2">
+                    <input class="form-control"
+                           type="text"
+                           aria-label="Definition"
+                           placeholder="Enter a definition"
+                           @bind="FlashcardCreate.Definition">
+                    <div class="d-flex justify-content-end">
+                        <Switch class="align-self-center" @bind-Value="activatedExtra"/>
+                        <Button Style="--bs-btn-border-width:none" Color="ButtonColor.None"
+                                Outline="false"
+                                @onclick="@(async () => await OnRemoveItem.InvokeAsync(Index))"
+                                disabled="@CanRemoved">
+                            <Icon Name="IconName.TrashFill" Size="IconSize.x4" Color="IconColor.Danger"/>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </CardText>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public int Index { get; set; }
+
+    [Parameter]
+    public FlashcardCreate FlashcardCreate { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnRemoveItem { get; set; }
+    [Parameter]
+    public bool CanRemoved { get; set; }
+
+    private bool activatedExtra = false;
+
+    private int currentIndex => Index + 1;
+
+}

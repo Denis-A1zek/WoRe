@@ -1,0 +1,55 @@
+﻿@using WoRe.Core.Kernel.Models
+
+
+<section class="d-flex flex-column w-50">
+    <div class="quiz-card">
+        <div class="d-flex justify-content-between w-100">
+            <div>
+                ffd
+            </div>
+            <div>
+                fdsf
+            </div>
+        </div>
+        <div>
+            <p>@_currentCard.Term</p>
+            <p>@_currentCard.Extra</p>
+            <p>@_currentCard.Definition</p>
+        </div>
+        <div>
+            тут мб инфо
+        </div>
+    </div>
+
+    <div class="d-flex align-self-center">
+        <Button 
+            Style="--bs-btn-border-width:none"
+            @onclick="(() => _currentCardsNode = _currentCardsNode.Previous ?? _currentCardsNode)"
+            Disabled="@(_currentCardsNode.Previous is null)">
+             <Icon Name="IconName.ArrowLeftCircleFill" Size="IconSize.x4" Color="IconColor.Primary"/>
+        </Button>
+        <Button 
+            Style="--bs-btn-border-width:none"
+            class="ms-4"
+            @onclick="(() => _currentCardsNode = _currentCardsNode.Next ?? _currentCardsNode)"
+            Disabled="@(_currentCardsNode.Next is null)">
+            <Icon Name="IconName.ArrowRightCircleFill" Size="IconSize.x4" Color="IconColor.Primary"/>
+        </Button>
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public FlashcardSetView FlashcardSet { get; set; }
+    
+    private LinkedList<FlashcardView> _linkedCards => new LinkedList<FlashcardView>(FlashcardSet.Flashcards);
+    private LinkedListNode<FlashcardView> _currentCardsNode;
+    private FlashcardView _currentCard => _currentCardsNode.Value;
+
+    protected override Task OnInitializedAsync()
+    {
+        _currentCardsNode = _linkedCards.First;
+        return base.OnInitializedAsync();
+    }
+
+}

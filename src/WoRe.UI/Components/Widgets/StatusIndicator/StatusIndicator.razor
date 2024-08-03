@@ -1,0 +1,32 @@
+﻿@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Components.Pages.Library.Models
+
+
+<section class="d-flex gap-3">
+    @if (FlashcardSet.MasteredCount != 0)
+    {
+        <QuantityIndicator IndicatorArgs=@Mastered></QuantityIndicator>
+    }
+    @if (FlashcardSet.StillLearningCount != 0)
+    {
+        <QuantityIndicator IndicatorArgs=@StillLearning></QuantityIndicator>
+    }
+    @if (FlashcardSet.NotStudiedCount != 0)
+    {
+        <QuantityIndicator IndicatorArgs=@NotStudied></QuantityIndicator>
+    }
+</section>
+
+@code {
+    [Parameter]
+    public FlashcardSetDetails FlashcardSet { get; set; }
+    
+    private QuantityIndicatorArgs Mastered 
+        =>  new QuantityIndicatorArgs(CircleColor.Green, FlashcardSet.MasteredCount, "Mastered");
+    
+    private QuantityIndicatorArgs StillLearning 
+        =>  new QuantityIndicatorArgs(CircleColor.Orange, FlashcardSet.StillLearningCount, "Still learning");
+    
+    private QuantityIndicatorArgs NotStudied 
+        =>  new QuantityIndicatorArgs(CircleColor.Blue, FlashcardSet.NotStudiedCount, "Not studied");
+}

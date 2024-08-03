@@ -1,0 +1,52 @@
+﻿@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Common.Enums
+
+
+<section class="d-flex flex-column">
+    <div class="d-flex">
+        <p class="fs-1">Flashcard set name</p>
+        <div class="flex-fill align-self-center ms-3">
+            <input class="form-control"
+                   type="text"
+                   aria-label="Term"
+                   placeholder="Enter a term"
+                   @bind="@FlashcardSet.Title">
+        </div>
+        <button class="btn btn-primary ms-2 align-self-center" @onclick="() => FlashcardSetSaved.InvokeAsync()">Save</button>
+    </div>
+    <div class="form-floating p-2 flex-fill">
+        <textarea class="form-control"
+                  placeholder="Leave a comment here"
+                  id="descArea"
+                  style="height: 100px"
+                  @bind="FlashcardSet.Description">
+            </textarea>
+        <label for="descArea">Description (optional) </label>
+    </div>
+    <FlashcardsEditorView FlashcardSet="@FlashcardSet"></FlashcardsEditorView>
+</section>
+
+@code {
+    [Parameter]
+    public OperationType OperationType { get; set; }
+
+    [Parameter]
+    public FlashcardSetCreate FlashcardSet { get; set; }
+
+    [Parameter]
+    public EventCallback FlashcardSetSaved { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(OperationType == OperationType.Create)
+        {
+            FlashcardSet.Flashcards.AddRange(Enumerable.Range(0, 4)
+            .Select(_ => new FlashcardCreate
+                {
+                    Term = "",
+                    Definition = ""
+                }));
+        }      
+        base.OnInitialized();
+    } 
+}

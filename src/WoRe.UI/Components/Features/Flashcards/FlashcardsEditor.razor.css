@@ -1,0 +1,15 @@
+.flashcard-section {
+    flex-direction: row;
+
+}
+
+.flashcard-title{
+    align-self: end;   
+}
+
+@media (max-width: 729px) {
+
+    .flashcard-section {
+        flex-direction: column;
+    }
+}

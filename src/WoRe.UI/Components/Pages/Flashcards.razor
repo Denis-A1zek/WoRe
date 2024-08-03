@@ -1,0 +1,41 @@
+﻿@page "/flashcard-set/quiz/{Id}"
+
+@using WoRe.Core.Interfaces
+@using WoRe.Core.Kernel.Models
+@using WoRe.UI.Components.Features.Quiz
+
+<h3>Flashcards @_flashcardSet.Title</h3>
+
+<section class="d-flex justify-content-center">
+    <FlashcardQuiz FlashcardSet="_flashcardSet"></FlashcardQuiz>
+</section>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery] 
+    public string Id { get; set; }
+    
+    [Inject]
+    public IFlashcardService FlashcardService { get; set; }
+    
+    [Inject]
+    public NavigationManager Navigation { get; set; }
+    
+    [Inject] 
+    protected ToastService ToastService { get; set; } = default!;
+    
+    private Guid _id => Guid.Parse(Id);
+    private FlashcardSetView _flashcardSet;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await FlashcardService.GetSetById(_id);
+        if (result.IsError)
+        {
+            ToastService.Notify(new(ToastType.Danger, $"Can't load the flashcard set"));
+            Navigation.NavigateTo("/");
+        }
+        _flashcardSet = result.Value;
+        await base.OnInitializedAsync();
+    }
+}
